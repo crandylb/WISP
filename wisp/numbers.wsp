@@ -1,0 +1,12 @@
+N1 = 0.                 Set the initial bracket count.
+READ, CAR I = INPUT.    Read the next character.
+  TO LPAREN IF CAR I = '(.
+  TO READ IF CAR I = ' .  Eliminate space.
+  PUNCH CAR I, TO READ.   Punch anything else.
+LPAREN, N1 = N1 + 1.    Increment the bracket count.
+READ2, CAR I = INPUT.   Read the next character.
+  TO LPAREN IF CAR I = '(.
+  TO READ2 IF CAR I NE ').
+  N1 = N1 - 1, TO READ2 IF N1 GT 0.
+  TO READ.
+.

@@ -1,0 +1,60 @@
+START LIST A.                 A, B, C, AND D ARE FLAG LISTS.
+START LIST B.
+START LIST C.
+START LIST D.
+START LIST I.                           INPUT STRING.
+START LIST K.                 COMPILER ERROR FLAG.
+START LIST L.                 LABEL GENERATOR.
+START LIST M.                 TEMPORARY LOCATION AND ERROR FLAG.
+START LIST N.                 LIST OF DEFINED LABELS.
+START LIST P.                 FLAG FOR PRINT ROUTINE.
+START LIST 1.                 PARAMETER LIST HEADERS.
+2 = CDR 1.
+3 = CDR 2.
+4 = CDR 3.
+5 = CDR 4.
+6 = CDR 5.
+7 = CDR 6.
+8 = CDR 7.
+9 = CDR 8.
+0 = CDR 9.
+F = '1.                       SET UP THE PARAMETER LISTS.
+01.
+F = CDR F.                    STEP TO THE NEXT PARAMETER LIST.
+START LIST G.
+CAR F = G.
+TO 01 IF CAR F NE CAR 0.      ARE WE DONE YET, NO.
+CAR A = INPUT.                WISP END-OF-LINE FLAG.
+CAR B = INPUT.                MCT PARAMETER FLAG.
+CAR C = INPUT.                MCT END-OF-LINE FLAG.
+CAR D = INPUT.                NUMBER OF DIGITS IN A LABEL.
+CAR I = CAR A.                SET FOR A NEW LINE.
+TO 20 AND BACK.               READ THE FIRST TEMPLATE.
+F = 'E.
+CDR F = CDR I.                ATTACH THE TEMPLATE TO THE TREE.
+CDR I = NIL.                  REMOVE FROM THE INPUT LIST.
+02.                           READ THE FIRST STANDARD FORM.
+F = CDR F.
+TO 02 IF CAR F NE NIL.        HAVE WE REACHED THE END, NO.
+TO 12 AND BACK.               YES, GET THE MCT AND READ ALL DEFINITIONS.
+03.                           RE-ENTER FOR ANOTHER COMPILATION.
+O = L.                        SET UP THE LABEL GENERATOR.
+TO 04 IF CAR D = '0.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '1.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '2.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '3.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '4.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '5.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '6.

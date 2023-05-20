@@ -1,0 +1,542 @@
+START LIST A.                 A, B, C, AND D ARE FLAG LISTS.
+START LIST B.
+START LIST C.
+START LIST D.
+START LIST I.                 INPUT STRING.
+START LIST K.                 COMPILER ERROR FLAG.
+START LIST L.                 LABEL GENERATOR.
+START LIST M.                 TEMPORARY LOCATION AND ERROR FLAG.
+START LIST N.                 LIST OF DEFINED LABELS.
+START LIST P.                 FLAG FOR PRINT ROUTINE.
+START LIST 1.                 PARAMETER LIST HEADERS.
+2 = CDR 1.
+3 = CDR 2.
+4 = CDR 3.
+5 = CDR 4.
+6 = CDR 5.
+7 = CDR 6.
+8 = CDR 7.
+9 = CDR 8.
+0 = CDR 9.
+F = '1.                       SET UP THE PARAMETER LISTS.
+01.
+F = CDR F.                    STEP TO THE NEXT PARAMETER LIST.
+START LIST G.
+CAR F = G.
+TO 01 IF CAR F NE CAR 0.      ARE WE DONE YET, NO.
+CAR A = INPUT.                WISP END-OF-LINE FLAG.
+CAR B = INPUT.                MCT PARAMETER FLAG.
+CAR C = INPUT.                MCT END-OF-LINE FLAG.
+CAR D = INPUT.                NUMBER OF DIGITS IN A LABEL.
+CAR I = CAR A.                SET FOR A NEW LINE.
+TO 20 AND BACK.               READ THE FIRST TEMPLATE.
+F = 'E.
+CDR F = CDR I.                ATTACH THE TEMPLATE TO THE TREE.
+CDR I = NIL.                  REMOVE FROM THE INPUT LIST.
+02.                           READ THE FIRST STANDARD FORM.
+F = CDR F.
+TO 02 IF CAR F NE NIL.        HAVE WE REACHED THE END, NO.
+TO 12 AND BACK.               YES, GET THE MCT AND READ ALL DEFINITIONS.
+03.                           RE-ENTER FOR ANOTHER COMPILATION.
+O = L.                        SET UP THE LABEL GENERATOR.
+TO 04 IF CAR D = '0.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '1.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '2.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '3.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '4.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '5.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '6.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '7.
+CAR O = '0.
+O = CDR O.
+TO 04 IF CAR D = '8.
+CAR O = '0.
+O = CDR O.
+04.
+CAR O = 'U.                   SET THE FLAG ENDING THE GENERATOR.
+O = N.                        SET THE POINTER TO THE LABEL LIST.
+START LIST T.                 START THE LABEL TREE.
+CAR K = '+.                   SET THE PUNCH SWITCH.
+CAR P = '2.                   TURN OFF PRINTING.
+CAR I = CAR A.                SET TO SKIP TO THE FIRST PROGRAM LINE.
+05.                           COMPILER LOOP.
+TO 20 AND BACK.               READ ONE INPUT STATEMENT.
+TO 30 AND BACK.               COMPILE ONE STATEMENT.
+TO 05 IF CAR M NE ' .         WERE THERE ERRORS, YES.
+TO 41 AND BACK.               PUT OUT MACHINE CODE.
+Z = CAR 0.                    RESET PARAMETER ZERO.
+CAR Z = NIL.
+TO 05 IF CAR M NE ' .         WAS THE STATEMENT CORRECT, NO.
+TO 05 IF CAR P = '2.          YES, SHOULD WE PRINT, NO.
+TO 90 AND BACK.               YES, PRINT IT.
+TO 05.
+10.                           READ STANDARD FORMS ONTO THE OPS TREE.
+F = 'E.                       INITIALIZE THE POINTER.
+TO 20 AND BACK.               READ ONE INPUT LINE.
+G = I.                        SET G ONTO THE INPUT.
+11.                           MATCH THE INPUT TO THE CURRENT BRANCH.
+F = CDR F.
+G = CDR G.
+TO 14 IF CAR F NE CAR G.      DOES THE INPUT MATCH THE TREE, NO.
+09.
+TO 11 IF CAR F NE NIL.        ARE WE FINISHED WITH THIS LINE, NO.
+12.                           READ THE MACHINE CODE TRANSLATION.
+F = CDR F.
+NEXT LINE ON INPUT.
+CAR F = INPUT.
+TO 13 IF CAR F NE CAR C.      IS THE FIRST CHARACTER AN EOL, NO.
+CAR M = INPUT.                YES, GET THE SECOND.
+TO 10 IF CAR M NE CAR C.      HAVE WE REACHED THE END OF THE DEFINITIONS.
+RETURN.                       YES, GET OUT.
+13.                           READ ONE LINE OF THE MCT.
+F = CDR F.
+CAR F = INPUT.
+TO 13 IF CAR F NE CAR C.      IS THIS THE END OF THE MCT LINE, NO.
+TO 12.
+14.                           A MISMATCH HAS OCCURRED.
+TO 19 IF CAR F = ATOM.        ARE WE AT A NODE, NO.
+TO 15 IF CAR G NE '*.         YES, IS THE CHARACTER A PARAMETER, NO.
+F = CDR F.
+TO 11 IF CAR F = '*.          IS THERE A PARAMETER HERE IN THE TREE, YES.
+TO 18.
+15.
+F = CDR F.
+16.
+TO 09 IF CAR F = CAR G.
+TO 17 IF CAR F = ATOM.
+X = CAR F.
+F = CDR F.
+TO 16 IF CAR G NE CAR X.
+F = X.
+TO 09.
+17.                           CREATE A NEW BRANCH AT THIS NODE.
+START LIST X.                 GET A NEW ELEMENT.
+PUSH DOWN F.
+CAR F = X.                    ATTACH IT TO THE TREE.
+F = X.                        SET THE POINTER ONTO THE NEW BRANCH.
+18.                           FILL THE NEW BRANCH.
+CAR F = CAR G.                COPY ONE INPUT CHARACTER.
+TO 12 IF CAR F = NIL.         HAVE WE REACHED THE END, YES.
+F = CDR F.                    NO, GET THE NEXT ATOM.
+G = CDR G.
+TO 18.
+19.                           WE MUST CREATE A NODE.
+TO 17 IFCAR F = '*.           IS THERE A PARAMETER ON THE TREE, YES.
+PUSH DOWN F.                  NO, SAVE THE SPACE FOR ONE.
+CAR F = CDR F.
+CDR F = NIL.
+TO 15 IF CAR G NE '*.         IS THE INPUT A PARAMETER FLAG, NO.
+F = CDR F.                    YES, PLACE IT ON THE PARAMETER BRANCH.
+CAR F = '*.
+TO 18.
+20.                           READ ONE INPUT STATEMENT.
+G = CDR I.
+TO 21 IF CAR I NE CAR A.      SHOULD WE GO TO THE NEXT LINE, NO.
+NEXT LINE ON INPUT.
+CAR I = ',.
+21.                           ELIMINATE ANY LEADING SPACES.
+CAR G = INPUT.
+TO 21 IF CAR G = ' .
+22.                           CHECK AN INPUT CHARACTER.
+TO 25 IF CAR G = ' .
+TO 28 IF CAR G = ',.
+TO 27 IF CAR G = CAR A.
+23.                           CHECK A CHARACTER WHICH IS NOT A
+TO 24 IF CAR G NE ''.         SPACE OR DELIMITER.
+G = CDR G.                    DO NOT CHECK A CHARACTER WHICH IS
+CAR G = INPUT.                PRECEEDED BY A QUOTE.
+24.                           READ AND CHECK THE NEXT CHARACTER.
+G = CDR G.
+CAR G = INPUT.
+TO 22.
+25.                           ELIMINATE REDUNDANT SPACES.
+CAR M = INPUT.
+TO 25 IF CAR M = ' .
+TO 28 IF CAR M = ',.
+TO 27 IF CAR M = CAR A.
+G = CDR G.                    THE CHARACTER IS NOT A SPACE OR DELIMITER.
+CAR G = CAR M.
+TO 23.
+27.
+CAR I = CAR A.                SET TO SKIP TO THE NEXT LINE.
+28.                           THE CHARACTER IS AN END-OF-STATEMENT.
+CAR G = NIL.
+RETURN.
+30.                           COMPILE ONE STATEMENT.
+F = E.                        SET THE OPERATIONS TREE POINTER.
+J = 1.                        RESET THE PARAMETER POINTER
+CAR M = ' .                   AND ERROR FLAG.
+G = CDR I.                    SET THE STATEMENT POINTER.
+TO 33.
+32.                           MOVE TO THE NEXT CHARACTER.
+TO 29 IF CAR F = NIL.         HAVE WE MATCHED THE WHOLE STATEMENT, YES.
+F = CDR F.                    NO, STEP ALONG THE CURRENT BRANCH
+G = CDR G.                    AND STATEMENT.
+33.
+TO 37 IF CAR F = '*.          SHOULD THIS BE A PARAMETER, YES.
+TO 32 IF CAR F = CAR G.       NO, DOES THE STATEMENT STILL MATCH, YES.
+TO 36 IF CAR F = ATOM.        NO, ARE WE AT A NODE, NO.
+TO 34 IF CAR F = NIL.         YES, IS THERE A PARAMETER POSSIBLE, NO.
+SAVE F.                       YES, SAVE THE POINTER.
+SAVE J.                       PARAMETER POINTER.
+SAVE G.                       INPUT POINTER.
+34.                           CHECK A NODE.
+F = CAR F.                    MOVE ONTO THE NODE.
+35.                           SCAN A NODE.
+TO 32 IF CAR F = CAR G.       DOES THE STATEMENT MATCH, YES.
+TO 36 IF CAR F = ATOM.        NO, ARE WE STILL AT THE NODE, NO.
+X = CAR F.                    YES, CHECK THE NEXT BRANCH.
+F = CDR F.
+TO 35 IF CAR G NE CAR X.      DOES IT MATCH, NO.
+F = X.                        YES, SCAN IT.
+TO 32.
+36.                           WE HAVE HAD A MISMATCH.
+TO 98 IF STACK EMPTY.         ARE THERE ANY MORE POSSIBILITIES, NO.
+RECALL G.                     YES, RECALL THE INPUT POINTER.
+RECALL J.                     PARAMETER POINTER.
+RECALL F.                     TREE POSITION.
+F = CDR F.                    STEP TO THE PARAMETER BRANCH.
+37.                           DEFINE A PARAMETER.
+TO 36 IF CAR G = NIL.         THE LAST CHARACTER CANNOT BE A PARAMETER.
+Z = CAR J.                    POINT Z TO THE CURRENT PARAMETER STORE.
+J = CDR J.                    INCREMENT THE PARAMETER STORE.
+F = CDR F.
+38.                           GET THE PARAMETER STRING.
+CAR Z = CAR G.
+TO 33 IF CAR G = NIL.         HAS THE PARAMETER ENDED, YES.
+G = CDR G.
+Z = CDR Z.
+TO 38 IF CAR G NE ' .         HAS THE PARAMETER ENDED, NO.
+CAR Z = NIL.
+TO 33.
+40.                           MCT OUTPUT ROUTINE.
+TO 41 IF CAR K = '-.          IS PUNCHING SUSPENDED, YES.
+TO 41 IF CAR K = '+.          NO, ARE WE AT THE BEGINNING OF A LINE, YES.
+FINISH LINE ON PUNCH.
+CAR K = '+.
+41.                           PUNCH THE LINE OF THE MCT.
+F = CDR F.
+TO 29 IF CAR F = CAR C.       IS THE MCT COMPLETE, YES.
+42.                           CHECK ONE CHARACTER.
+TO 43 IF CAR F = CAR B.       IS IT A PARAMETER FLAG, YES.
+TO 40 IF CAR F = CAR C.       NO, IS IT THE END OF THE CURRENT LINE, YES.
+TO 45 IF CAR K = '-.          NO, IS PUNCHING SUSPENDED, YES.
+PUNCH CAR F.                  NO, PUT IT OUT.
+CAR K = 'P.                   SET THE PUNCH FLAG.
+F = CDR F.                    CHECK THE NEXT.
+TO 42.
+43.                           EVALUATE A PARAMETER.
+F = CDR F.                    GET THE PARAMETER NUMBER.
+TO 46 IF CAR F = 'S.          IS IT A COMPILER SWITCH, YES.
+Z = CAR F.                    NO, SET Z TO THE PARAMETER DEFINITION.
+F = CDR F.                    GET THE TYPE CONVERSION REQUIRED.
+Z = CDR Z.
+TO 51 IF CAR Z = CAR O.       IS THIS A CALL ON PARAMETER ZERO.
+Z = CAR Z.
+TO 49 IF CAR F = '1.          LIST REFERENCE.
+TO 66 IF CAR F = '2.          LABEL REFERENCE.
+TO 66 IF CAR F = '3.          LABEL DEFINITION.
+TO 45 IF CAR K = '-.          WAS PUNCHING SUSPENDED, YES.
+44.                           COPY THE ARGUMENT.
+PUNCH CAR Z.
+Z = CDR Z.
+TO 44 IF CAR Z NE NIL.
+CAR K = 'P.                   SET THE PUNCH FLAG.
+45.
+F = CDR F.                    STEP TO THE NEXT CHARACTER OF THE MCT.
+TO 42.
+46.                           THE PARAMETER IS A COMPILER SWITCH.
+F = CDR F.                    GET THE SWITCH VALUE.
+TO 10 IF CAR F = '0.          DEFINE A NEW STANDARD FORM.
+TO 47 IF CAR F = '1.          COPY MACHINE CODE TO A VOID LINE.
+TO 96 IF CAR F = '2.          SET TO PRINT ALL SOURCE TEXT.
+TO 97 IF CAR F = '3.          SUPRESS PRINTING OF CORRECT SOURCE TEXT.
+TO 80 IF CAR F = '4.          WRAP UP THE COMPILATION.
+TO 78 IF CAR F = '5.          DEFINE NEW LISS.
+CAR M = 'C.                   SET THE COMPILER SWITCH ERROR FLAG.
+TO 99.
+47.                           COPY MACHINE CODE.
+NEXT LINE ON INPUT.
+CAR M = INPUT.
+TO 45 IF CAR M = CAR C.
+TO 47 IF CAR K = '-.          WAS PUNCHING SUSPENDED, YES.
+TO 48 IF CAR K = '+.          NO, ARE WE AT THE BEGINNING OF A LINE, YES.
+FINISH LINE ON PUNCH.
+CAR K = '+.
+48.                           COPY ONE LINE.
+PUNCH CAR M.
+CAR M = INPUT.
+TO 48 IF CAR M NE CAR C.      HAVE WE COME TO EOL, NO.
+FINISH LINE ON PUNCH.
+TO 47.                        YES, CHECK THE NEXT LINE.
+49.                           LOOK UP A DEFINED LIST REFERENCE.
+Y = CDR Z.
+TO 50 IF CAR Y NE NIL.        IS THIS A SPECIAL LIST, YES.
+TO 45 IF CAR K = '-.          NO, HAS PUNCHING BEEN SUSPENDED, YES.
+PUNCH DECIMAL CAR Z.          NO, PUNCH ITS RELATIVE ADDRESS.
+CAR K = 'P.                   SET THE PUNCH FLAG.
+TO 45.
+50.
+TO 60 AND BACK.
+TO 69 IF CAR Y ='D.           IS THE LIST PROPERLY DEFINED, YES.
+CAR M = 'L.                   NO, SET THE LIST NAME ERROR FLAG.
+TO 99.
+51.                           PARAMETER ZERO CONVERSION.
+Y = CAR Z.                    CHECK THE NEXT LABEL.
+TO 69 IF CAR F = CAR Y.       IS THIS THE ONE, YES.
+Z = CDR Z.                    NO. MOVE ALONG THE LIST OF LABELS.
+TO 51 IF CAR Y NE NIL.        HAVE WE RUN OUT OF LABELS, NO.
+TO 52 IF CAR Z = NIL.         YES, IS THERE SPACE ON THE LIST, NO.
+Z = CAR Z.                    YES, GO AND DELETE THE NEXT LABEL.
+CAR Z = NIL.
+TO 53.
+52.                           START A NEW SUBLIST.
+START LIST X.
+CAR Z = X.
+53.                           GENERATE AND ATTACH A NEW LABEL.
+CAR Y = CAR F.                SET THE NAME.
+TO 70 AND BACK.               SET UP THE NEXT LABEL FROM THE GENERATOR.
+TO 69.                        COPY IT ONTO THE OUTPUT STREAM.
+60.                           LOOK UP A LABEL.
+Y = T.
+TO 64 IF CDR Y = NIL.         HAS THE LABEL TREE BEEN STARTED, NO.
+61.
+TO 62 IF CAR Y = CAR Z.       NO, ARE WE STILL ON THE RIGHT BRANCH, YES.
+TO 63 IF CAR Y = ATOM.        NO, MUST WE CREATE A NEW BRANCH, YES.
+X = CAR Y.                    NO, LOOK AT THE CURRENT BRANCH.
+Y = CDR Y.
+TO 61 IF CAR X NE CAR Z.      DOES IT MATCH, NO.
+Y = X.
+62.
+TO 65 IF CAR Y = NIL.         HAVE WE MATCHED THE TREE BRANCH, YES.
+Y = CDR Y.                    CONTINUE SCANNING.
+Z = CDR Z.
+TO 61.
+63.                           WE MUST CREATE A NEW BRANCH.
+PUSH DOWN Y.
+START LIST X.
+CAR Y = X.
+Y = X.
+TO 65 IF CAR Z = NIL.         HAVE WE REACHED THE END, YES.
+64.
+CAR Y = CAR Z.                COPY ONE CHARACTER TO THE PARAMETER.
+Y = CDR Y.
+Z = CDR Z.
+TO 64 IF CAR Z NE NIL.
+65.
+Y = CDR Y.                    STEP TO THE FLAG.
+RETURN.
+66.                           DEAL WITH A LABEL.
+TO 60 AND BACK.
+TO 67 IF CDR Y = NIL.         IS THIS A NEW LABEL, YES.
+TO 68 IF CAR Y = 'U.          HAS IT BEEN DEFINED, NO.
+TO 45 IF CAR Y = 'M.          YES, HAS IT BEEN MULTIPLY DEFINED, YES.
+TO 69 IF CAR F = '2.          IS THIS A MULTIPLE DEFINITION, NO.
+CAR Y = 'M.                   YES, SET THE MULTIPLE DEFINITION FLAG.
+CAR K = '-.                   SUSPENDED PUNCHING.
+TO 45.                        CONTINUE PUNCHING THE MCT.
+67.
+CAR O = Y.                    ATTACH A NEW LABEL TO THE LIST.
+O = CDR O.
+TO 70 AND BACK.               GET A NEW LABEL.
+CAR Y = 'U.                   SET THE 'UNDEFINED' FLAG.
+68.
+TO 69 IF CAR F = '2.          IS THIS A LABEL DEFINITION, NO.
+CAR Y = ' .                   YES, MARK THE LABEL AS DEFINED.
+69.
+Z = CDR Y.
+TO 44 IF CAR K NE '-.         HAS PUNCHING BEEN SUSPENDED, NO.
+TO 45.                        YES, CONTINUE SCANNING THE MCT.
+70.                           CREATE A NEW LABEL.
+Z = L.
+71.                           BUMP THE CONTENTS OF LIST Z.
+SAVE X.
+X = '1.
+TO 72 IF CAR Z = 'U.
+TO 73 IF CAR Z = '0.
+X = '2.
+TO 73 IF CAR Z = '1.
+X = '3.
+TO 73 IF CAR Z = '2.
+X = '4.
+TO 73 IF CAR Z = '3.
+X = '5.
+TO 73 IF CAR Z = '4.
+X = '6.
+TO 73 IF CAR Z = '5.
+X = '7.
+TO 73 IF CAR Z = '6.
+X = '8.
+TO 73 IF CAR Z = '7.
+X = '9.
+TO 73 IF CAR Z = '8.
+X = '0.
+CAR Z = '0.
+Z = CDR Z.                    THERE IS A CARRY.
+TO 71.
+72.                           ADD A DIGIT TO LIST Z.
+CAR Z = '1.
+Z = CDR Z.
+CAR Z = 'U.
+SAVE X.
+TO 75.
+73.
+CAR Z = X.
+74.                           COMPLETE THE LABEL.
+SAVE X.
+Z = CDR Z.
+X = CAR Z.
+TO 74 IF CAR Z NE 'U.         HAVE WE REAHED THE END, NO.
+75.                           YES, COPY THE LABEL IN THE RIGHT ORDER.
+Z = CDR Y.
+76.
+RECALL X.
+TO 29 IF STACK EMPTY.         HAVE WE GOT EVERYTHING, YES.
+CAR Z = X.
+Z = CDR Z.
+TO 76.
+78.                           DEFINE NEW LISTS.
+TO 20 AND BACK.               READ THE LIST NAME.
+Z = CDR I.
+TO 45 IF CAR Z = NIL.         TERMINATE ON A VOID LINE.
+TO 60 AND BACK.               LOOK UP THE NAME.
+CAR Y = 'D.
+CAR O =  Y.                   ATTACH THE NEW LABEL TO THE LABEL LIST.
+O = CDR O.
+TO 20 AND BACK.
+CDR Y = CDR I.
+79.                           ATTACH THE DEFINITION.
+Y = CDR Y.
+TO 79 IF CAR Y NE NIL.
+CDR I = CDR Y.
+CDR Y = NIL.
+TO 78.
+80.                           COMPILATION COMPLETE.
+TO 08 IF CAR K NE 'P.
+FINISH LINE ON PUNCH.
+08.
+TO 88 IF CDR T = NIL.         ARE THERE ANY LABELS, NO.
+FINISH LINE ON PRINT.
+FINISH LINE ON PRINT.
+FINISH LINE ON PRINT.
+PRINT 'R.
+PRINT 'E.
+PRINT 'F.
+PRINT 'S.
+PRINT '-.
+Y = T.                        PREPARE TO REVERSE THE LABEL TREE.
+T = A.
+TO 81 AND BACK.               PUT OUT THE LABELS.
+88.
+TO 89 IF CAR K = '-.          WERE THERE COMPILATION ERRORS, YES.
+ASSEMBLE.
+89.
+STOP.                         YES, DO NOT ASSEMBLE THE PROGRAM.
+81.                           SCAN THE TREE BRANCH.
+TO 82 IF IF CAR Y = ATOM.
+SAVE T.                       MUST RETURN TO THE LOWER BRANCH.
+SAVE Y.
+Y = CDR Y.                    MOVE ALONG AN UPPER BRANCH.
+TO 81.
+82.                           REVERSE THE POINTER TO AN ATOM.
+TO 83 IF CAR Y = NIL.         HAVE WE REACHED THE END OF THE USERS LABEL,
+Z = CDR Y.                    NO, REVERSE THE POINTER.
+CDR Y = T.
+T = Y.                        STEP ALONG THE BRANCH.
+Y = Z.
+TO 81.
+83.                           WE HAVE REACHED A LEAF OF THE TREE.
+Y = CDR Y.
+Y = CDR Y.                    MOVE PAST THE FLAG.
+PUSH DOWN Y.                  ATTACH THE USER'S LABEL.
+CAR Y = T.
+TO 84 IF STACK EMPTY.         HAVE WE REACHED ALL BRANCHES, YES.
+RECALL Y.                     NO, RETURN TO THE LAST ONE SAVED.
+RECALL T.
+Y = CAR Y.                    MOVE ONTO IT.
+TO 81.
+84.                           PRINT THE NEXT LABEL.
+FINISH LINE ON PRINT.
+TO 29 IF CAR N = ATOM.        HAVE WE FINISHED THE REFERENCE TABLES, YES.
+Y = CAR N.
+N = CDR N.                    REPLACE BY 'POP UP N' TO SAVE SPACE.
+PRINT CAR Y.                  PRINT THE DEFINITION FLAG.
+CAR M = CAR Y.
+PRINT ' .
+PRINT ' .
+Y = CDR Y.                    REPLACE BY 'POP UP Y' TO SAVE SPACE.
+Z = CAR Y.                    SAVE THE POINTER TO THE USER'S LABEL.
+TO 85 IF CAR M = ' .          IS THIS LABEL PROPERLY DEFINED, YES.
+TO 85 IF CAR M = 'D.          NO, IS IT A DEFINED LIST, YES.
+CAR K = '-.                   NO, DELETE ASSEMBLY.
+85.                           PRINT THE COMPILER-GENERATED LABEL.
+Y = CDR Y.                    REPLACE BY 'POP UP Y' TO SAVE SPACE.
+PRINT CAR Y.
+TO 85 IF CAR Y NE NIL.
+PRINT ' .
+86.                           COPY THE USER'S LABEL IN THE RIGHT ORDER.
+SAVE Z.
+Z = CDR Z.
+TO 86 IF CAR Z NE CAR A.      ARE WE AT THE END, NO.
+87.                           PRINT THE USER'S LABEL.
+TO 84 IF STACK EMPTY.
+RECALL Z.
+PRINT CAR Z.
+TO 87.
+90.                           STATEMENT PRINT POUTINE.
+TO 92 IF CAR P = '1.          YES, ARE WE AT THE BEGINNING OF A LINE, NO.
+91.                           YES, START A NEW LINE.
+PRINT CAR M.                  ERROR FLAG.
+PRINT ' .
+TO 92 IF CAR P = '2.          IS PRINTING OF CORRECT STATEMENTS DESIRED,
+CAR P = '1.                   YES, SET THE SWITCH FOR NON-EMPTY LINE.
+92.
+PRINT ' .
+G = CDR I.
+TO 94 IF CAR G = NIL.         IS THERE ANY STATEMENT, NO.
+93.                           PRINT ONE STATEMENT.
+PRINT CAR G.                  PRINT THE NEXT CHARACTER.
+G = CDR G.                    STEP ALONG.
+TO 93 IF CAR G NE NIL.        ARE WE FINISHED, NO.
+94.                           WE HAVE COMPLETED A STATEMENT.
+PRINT CAR I.                  PRINT THE TERMINATOR.
+TO 95 IF CAR I = CAR A.       WAS THIS THE LAST STATEMENT OF THE LINE, YES.
+TO 29 IF CAR P = '1.          ARE WE PRINTING CORRECT STATEMENTS, YES.
+FINISH LINE ON PRINT.         NO, PRINT ONLY ONE ERROR STATEMENT PER LINE.
+RETURN.
+95.                           WRAP UP THE PRINT LINE.
+FINISH LINE ON PRINT.
+TO 29 IF CAR P = '2.
+CAR P = '0.
+RETURN.
+96.                           COMMENCE PRINTING ALL STATEMENTS.
+CAR P = '0.
+TO 45.
+97.                           SUSPEND PRINTING OF CORRECT STATEMENTS.
+FINISH LINE ON PRINT.
+FINISH LINE ON PRINT.
+CAR P = '2.
+TO 45.
+98.                           ERROR - UNRECOGNIZABLE STATEMENT.
+CAR M = 'O.
+99.                           ERROR PRINT OUT.
+CAR K = '-.                   SUSPEND PUNCHING.
+TO 91 IF CAR P NE '1.         ARE WE IN A LINE, NO.
+FINISH LINE ON PRINT.         YES, TERMINATE IT.
+TO 91.
+.
+

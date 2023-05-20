@@ -1,0 +1,2 @@
+TEXT    (JUNK)
+GOOD    (BAD  (TO  (ANY  (DEPTH)  OF)  COURSE)).

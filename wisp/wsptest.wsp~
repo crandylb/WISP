@@ -1,0 +1,207 @@
+START LIST A.                           WSPTEST.WSP -- WISP Test Program
+START LIST B.
+START LIST C.
+START LIST D.
+START LIST E.
+START LIST F.
+START LIST G.
+START LIST H.
+START LIST I.
+START LIST J.
+START LIST K.
+START LIST L.
+START LIST M.
+START LIST N.
+START LIST O.
+START LIST P.
+START LIST Q.
+START LIST R.
+START LIST S.
+START LIST T.
+START LIST U.
+START LIST V.
+START LIST W.
+START LIST X.
+START LIST Y.
+START LIST Z.
+START LIST 0.
+START LIST 1.
+START LIST 2.
+START LIST 3.
+START LIST 4.
+START LIST 5.
+START LIST 6.
+START LIST 7.
+START LIST 8.
+START LIST 9.
+CAR A = INPUT.
+PRINT CAR A.                    T       CAR * = INPUT, PRINT CAR *. 
+CAR B = INPUT.
+C = B.
+PRINT CAR C.                    H       * = *.
+CAR D = INPUT.
+CAR E = CAR D.
+PRINT CAR E.                    E       CAR * = CAR *.
+TO 24 IF CAR E NE NIL.
+TO 25 IF CAR A NE NIL.
+24.
+PRINT CAR A.
+TO 17.
+25.
+CAR F = INPUT.
+PRINT CAR F.                    SPACE   TO ** IF CAR * NE NIL.
+G = CDR F.
+CAR G = INPUT.
+F = CDR F.
+PRINT CAR F.                    Q       * = CDR *.
+CAR I = INPUT.
+CAR H = INPUT.
+J = CAR H.
+K = CDR J.
+PRINT CAR K.                    U       * = CAR *.
+CAR L = J.
+PRINT CAR L.                    T       CAR * = *.
+CAR M = INPUT.
+CDR N = M.
+N = CDR N.
+PRINT CAR N.                    C       CDR * = *.
+TO 17 IF CAR A = 'P.
+TO 02 IF CAR A = 'T.
+TO 17.
+02.
+CAR O = INPUT.
+PRINT CAR O.                    K       TO ** IF CAR * = '*.
+TO 17 IF CAR A = CAR B.
+TO 04 IF CAR D = CAR E.
+PRINT CAR A.
+TO 17.
+04.
+CAR P = INPUT.
+PRINT CAR P.                     SPACE   TO ** IF CAR * = CAR *.
+PRINT 'B.                        B       PRINT '*.
+CAR Q = 'R.
+PRINT CAR Q.                     R       CAR * = '*.
+T = 'O.
+CAR U = T.
+PRINT CAR U.                     O       CDR * = NIL.
+CAR V = CDR W.
+V = CAR V.
+CAR V = 'W.
+CAR X = CDR W.
+X = CAR X.
+PRINT CAR X.                     W       CAR * = CDR *.
+TO 17 IF CAR X = NIL.
+TO 06 IF CAR Y = NIL.
+TO 17.
+06.
+PRINT 'N.                        N       TO ** IF CAR * = NIL.
+TO 17 IF CDR W = NIL.
+TO 06 IF CDR Y = NIL.
+PRINT 'Z.
+TO 17.
+08.
+PRINT ' .                        SPACE   TO ** IF CDR * = NIL.
+CAR X = NIL.
+TO 09 IF CAR X = NIL.
+PRINT 'Z.
+TO 17.
+09.
+CAR X = INPUT.
+PRINT CAR X.                     F       CAR * = NIL.
+CDR W = NIL.
+TO 10 IF CDR W = NIL.
+TO 17.
+10.
+CAR Z = INPUT.
+PRINT CAR Z.                     O       CDR * = NIL.
+CAR Y = Z.
+TO 17 IF CAR Y = ATOM.
+TO 12 IF CAR X = ATOM.
+TO 17.
+12.
+CAR 0 = INPUT.
+PRINT CAR 0.                     X       TO ** IF CAR * = ATOM.
+CDR 0 = 1.
+CDR 0 = CDR 1.
+TO 14 IF CDR 0 = NIL.
+PRINT 'Z.
+TO 17.
+14.
+PRINT ' .                        SPACE   CDR * = CDR *.
+TO 17 IF CAR 0 NE 'X.
+TO 16 IF CAR 1 NE 'X.
+16.
+PRINT 'J.                        J       TO ** IF CAR * NE '*.
+TO 17 IF CAR 1 NE CAR 2.
+TO 18 IF CAR 0 NE CAR 1.
+17.
+FINISH LINE ON PRINT.
+FINISH LINE ON PUNCH.
+STOP.
+18.
+PRINT 'U.                        U       TO ** IF CAR * NE CAR *.
+CAR 1 = 'M.
+2 = 1.
+PUSH DOWN 2.
+PRINT CAR 2.
+2 = CDR 2.
+PRINT CAR 2.                     M       PUSH DOWN *.
+T = 'P.
+SAVE T.
+T = 'X.
+SAVE T.
+T = 'V
+RECALL T.
+CAR U = T.
+TO 17 IF CAR U NE 'X.
+RECALL T.
+CAR U = T.
+PRINT CAR U.                     P       SAVE *, RECALL *.
+4 = 1.
+CAR 1 = 'M.
+CDR 1 = T.
+START LIST 1.
+TO 20 IF CAR 1 = NIL.
+TO 17.
+20.
+TO 23 IF CDR 1 = NIL.
+TO 17.
+23.
+TO 17 IF CAR 4 NE 'M.
+PRINT 'E.                        E       START LIST *.
+T = 'D.
+SAVE T.
+TO 21 AND BACK.
+CAR U = T.
+TO 17 IF CAR U NE 'X.
+RECALL T.
+CAR U = T.
+PRINT CAR U.                     D       TO ** AND BACK.
+TO 22 IF STACK EMPTY.
+TO 17.
+21.
+T = 'X.
+SAVE T.
+RETURN.
+22.
+SAVE T.
+TO 17 IF STACK EMPTY.
+CAR U = INPUT.
+PRINT CAR U.                     .       TO ** IF STACK EMPTY.
+FINISH LINE ON PRINT.
+PRINT 'O.                        O       FINISH LINE ON PRINT.
+NEXT LINE ON INPUT.
+CAR 5 = INPUT.
+TO 17 IF CAR 5 = '1.
+PRINT 'K.                        K       NEXT LINE ON INPUT.
+26.
+PUNCH CAR 5.                     PUNCH THE SECOND INPUT LINE AS IT STANDS.
+CAR 5 = INPUT.
+TO 26 IF CAR 5 NE '2.
+FINISH LINE ON PUNCH.
+PUNCH CAR Z.                     O       FINISH LINE ON PUNCH.
+PUNCH CAR O.
+PUNCH CAR F.
+PUNCH DECIMAL CAR U.             DECIMAL EQUIVALENT OF PERIOD.
+TO 17.
+
